@@ -13,7 +13,6 @@ def load_data(session, df):
         session.add(flower)
     session.commit()
 
-###### otra funcion para cargar los datos en la nueva tabla
 from models.analisisdesc import AnalisisDescriptivo
 
 def load_desc_data(session, df):
