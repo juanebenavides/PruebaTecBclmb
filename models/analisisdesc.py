@@ -1,0 +1,2 @@
+#hacer lo mismo del iris pero para el dataframe de el analsis
+#cada registro sea en esa tabla un campo que se llame variable y en ese guardar petal. lenght y despues el promedio,media desviacion est etc
