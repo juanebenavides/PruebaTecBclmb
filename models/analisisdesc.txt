@@ -1,0 +1,29 @@
+#hacer lo mismo del iris pero para el dataframe de el analsis
+#cada registro sea en esa tabla un campo que se llame variable y en ese guardar petal. lenght y despues el promedio,media desviacion est etc
+from sqlalchemy import Column, Float, String, Integer
+from db import Base
+
+class AnalisisDescriptivo(Base):
+    __tablename__ = "analisis_descriptivo"
+
+    id = Column(Integer, primary_key=True)
+    variable = Column(String, nullable=False)
+    count = Column(Float)
+    mean = Column(Float)
+    std = Column(Float)
+    min = Column(Float)
+    q25 = Column(Float)
+    q50 = Column(Float)
+    q75 = Column(Float)
+    max = Column(Float)
+
+    def __init__(self, variable, count, mean, std, min, q25, q50, q75, max):
+        self.variable = variable
+        self.count = count
+        self.mean = mean
+        self.std = std
+        self.min = min
+        self.q25 = q25
+        self.q50 = q50
+        self.q75 = q75
+        self.max = max

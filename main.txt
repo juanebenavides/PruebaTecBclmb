@@ -1,0 +1,52 @@
+import db
+import os
+import pandas as pd
+from etl.load import load_desc_data
+from etl import load, extract, transform
+
+DB_PATH = 'flores_db.sqlite'
+
+def reset_db():
+    if os.path.exists(DB_PATH):
+        os.remove(DB_PATH)
+    db.Base.metadata.create_all(db.engine)
+
+def run():
+    df = pd.read_csv('data/iris.csv')
+    df = transform.add_id(df)
+    df.columns = df.columns.str.replace('.', '_', regex=False)
+    load.load_data(db.session, df)
+    extract.compare_data(db.session, df, 0, 20)
+    moda_df = df.drop(columns='id').mode()
+    load_desc_data(db.session, df)
+    print(df.describe())
+    print(moda_df)
+
+if __name__ == '__main__':
+    reset_db()
+    run()
+
+import pandas as pd
+from sqlalchemy.orm import sessionmaker
+from models.analisisdesc import AnalisisDescriptivo
+from db import engine
+
+Session = sessionmaker(bind=engine)
+session = Session()
+
+results = session.query(AnalisisDescriptivo).all()
+
+data = [{
+    "variable": r.variable,
+    "count": r.count,
+    "mean": r.mean,
+    "std": r.std,
+    "min": r.min,
+    "q25": r.q25,
+    "q50": r.q50,
+    "q75": r.q75,
+    "max": r.max
+} for r in results]
+
+df = pd.DataFrame(data)
+df.to_csv("analisis_descriptivo.csv", index=False)
